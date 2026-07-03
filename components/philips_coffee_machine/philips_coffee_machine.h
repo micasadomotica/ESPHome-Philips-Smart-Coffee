@@ -220,6 +220,12 @@ namespace esphome
             /// @brief flag to indicate machine should be powered off after boot sequence
             bool pending_power_off_ = false;
 
+            /// @brief diagnostic counters for UART traffic visibility in API logs
+            uint32_t diagnostic_last_log_ = 0;
+            uint32_t display_rx_bytes_ = 0;
+            uint32_t mainboard_rx_bytes_ = 0;
+            uint32_t mainboard_valid_frames_ = 0;
+
 #ifdef USE_SWITCH
             /// @brief power switch reference
             std::vector<philips_power_switch::Power *> power_switches_;

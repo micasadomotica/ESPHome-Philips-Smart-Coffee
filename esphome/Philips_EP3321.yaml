@@ -1,6 +1,6 @@
 substitutions:
-  name: philips-ep3321
-  friendly_name: Philips EP3321
+  name: "philips-coffee-machine"
+  friendly_name: "Cafetera"
 
 esphome:
   name: ${name}
