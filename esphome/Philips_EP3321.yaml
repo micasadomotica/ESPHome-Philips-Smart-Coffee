@@ -31,6 +31,7 @@ captive_portal:
 
 external_components:
   - source: github://micasadomotica/ESPHome-Philips-Smart-Coffee@codex/ep3321
+    refresh: 0s
 
 uart:
   - id: uart_mainboard
