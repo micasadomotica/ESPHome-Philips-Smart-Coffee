@@ -1,7 +1,6 @@
 #include <cstddef>
 
 #include "esphome/core/log.h"
-#include "esphome/core/helpers.h"
 #include "philips_coffee_machine.h"
 
 namespace esphome
@@ -34,7 +33,6 @@ namespace esphome
                 std::size_t size = std::min(display_uart_.available(), DISPLAY_BUFFER_SIZE);
                 display_uart_.read_array(display_buffer, size);
                 display_rx_bytes_ += size;
-                ESP_LOGD(TAG, "D->M [%u]: %s", (unsigned) size, format_hex_pretty(display_buffer, size).c_str());
 
                 // Check if a action button is currently performing a long press
                 bool long_pressing = false;
@@ -77,7 +75,6 @@ namespace esphome
                 std::size_t size = std::min(mainboard_uart_.available(), MAINBOARD_BUFFER_SIZE - 2);
                 mainboard_uart_.read_array(mainboard_buffer + 2, size);
                 mainboard_rx_bytes_ += size + 2;
-                ESP_LOGD(TAG, "M->D [%u]: %s", (unsigned) size + 2, format_hex_pretty(mainboard_buffer, size + 2).c_str());
 
                 display_uart_.write_array(mainboard_buffer + 2, size);
 
