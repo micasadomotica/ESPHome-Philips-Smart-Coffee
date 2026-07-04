@@ -49,9 +49,11 @@ philips_coffee_machine:
   display_uart: uart_display
   mainboard_uart: uart_mainboard
   power_pin: GPIO12
+  invert_power_pin: true
   model: EP_3321
   language: en-US
   power_trip_delay: 750ms
+  display_boot_delay: 9000ms
   power_message_repetitions: 25
 
 text_sensor:
