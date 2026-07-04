@@ -48,6 +48,7 @@ namespace esphome
                 SELECT_AQUA_CLEAN,
                 SELECT_CALC_CLEAN,
                 PLAY_PAUSE,
+                RECOVER_DISPLAY,
             };
 
             /**
@@ -78,6 +79,36 @@ namespace esphome
                 void set_uart_device(uart::UARTDevice *uart)
                 {
                     mainboard_uart_ = uart;
+                };
+
+                /**
+                 * @brief Sets the power pin used to recover the display.
+                 *
+                 * @param pin Display power control pin
+                 */
+                void set_power_pin(GPIOPin *pin)
+                {
+                    power_pin_ = pin;
+                };
+
+                /**
+                 * @brief Sets the initial powered display pin state.
+                 *
+                 * @param initial_state pointer to the controller initial pin state
+                 */
+                void set_initial_state(bool *initial_state)
+                {
+                    initial_state_ = initial_state;
+                };
+
+                /**
+                 * @brief Sets whether the power pin logic should be inverted.
+                 *
+                 * @param invert True if the power pin is inverted
+                 */
+                void set_invert_power_pin(bool invert)
+                {
+                    invert_power_pin_ = invert;
                 };
 
                 /**
@@ -116,6 +147,8 @@ namespace esphome
 
                 void execute_command(const std::vector<uint8_t> &command);
 
+                void recover_display();
+
                 /**
                  * @brief Writes the button to uart or initializes loop based message sending
                  *
@@ -126,6 +159,12 @@ namespace esphome
                 Action action_;
                 /// @brief reference to uart connected to mainboard
                 uart::UARTDevice *mainboard_uart_;
+                /// @brief power pin used for display recovery
+                GPIOPin *power_pin_ = nullptr;
+                /// @brief initial power pin state reference
+                bool *initial_state_ = nullptr;
+                /// @brief whether the power pin should be inverted
+                bool invert_power_pin_ = false;
                 /// @brief time in ms for how long the button should be pressed.
                 bool should_long_press_ = false;
                 /// @brief true if the component is currently performing a long press

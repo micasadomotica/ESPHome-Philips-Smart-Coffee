@@ -194,6 +194,12 @@ button:
     name: Play Stop
     icon: mdi:play-pause
 
+  - platform: philips_coffee_machine
+    controller_id: coffee_machine
+    action: RECOVER_DISPLAY
+    name: Recover Display
+    icon: mdi:monitor-refresh
+
 number:
   - platform: philips_coffee_machine
     controller_id: coffee_machine

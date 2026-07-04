@@ -78,6 +78,29 @@ namespace esphome
 
             }
 
+            void ActionButton::recover_display()
+            {
+                if (power_pin_ == nullptr || initial_state_ == nullptr)
+                {
+                    ESP_LOGE(TAG, "Cannot recover display: power pin is not configured!");
+                    return;
+                }
+
+                bool powered_value = *initial_state_;
+                if (invert_power_pin_)
+                    powered_value = !powered_value;
+                bool cut_value = !powered_value;
+
+                ESP_LOGD(TAG, "Recover display: cut=%d restore=%d", cut_value, powered_value);
+                power_pin_->digital_write(cut_value);
+                delay(300);
+                power_pin_->digital_write(powered_value);
+                delay(800);
+                power_pin_->digital_write(cut_value);
+                delay(200);
+                power_pin_->digital_write(powered_value);
+            }
+
             void ActionButton::perform_action()
             {
                 auto action = action_;
@@ -171,6 +194,9 @@ namespace esphome
                         break;
                     case PLAY_PAUSE:
                         write_array(command_press_play_pause);
+                        break;
+                    case RECOVER_DISPLAY:
+                        recover_display();
                         break;
                     case SELECT_BEAN:
                         write_array(command_press_bean);
