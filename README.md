@@ -1,6 +1,6 @@
-# ESPHome Smart Coffee (Philips Series 2200/3200) [![CI](https://github.com/TillFleisch/ESPHome-Philips-Smart-Coffee/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/TillFleisch/ESPHome-Philips-Smart-Coffee/actions/workflows/ci.yaml)
+# ESPHome Smart Coffee (Philips Series 2200/3200/3300) [![CI](https://github.com/TillFleisch/ESPHome-Philips-Smart-Coffee/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/TillFleisch/ESPHome-Philips-Smart-Coffee/actions/workflows/ci.yaml)
 
-This project integrates a Philips Series 2200/3200 Coffee Machine into into [Home Assistant](https://home-assistant.io) through [ESPHome](https://esphome.io).
+This project integrates a Philips Series 2200/3200/3300 Coffee Machine into into [Home Assistant](https://home-assistant.io) through [ESPHome](https://esphome.io).
 This component has been developed on a Philips `EP2220` and an ESP8266 but it will happily run on an ESP32.
 Currently supported Coffee Machine models include:
 
@@ -8,6 +8,7 @@ Currently supported Coffee Machine models include:
 |-----------|---------------------|
 |Series 2200| `EP2220`, `EP2235`  |
 |Series 3200| `EP3221`, `EP3243`, `EP3246`  |
+|Series 3300| `EP3321`  |
 
 My modified `EP2220`:
 ![Modified Coffee Machine](images/machine_inside.jpg)
@@ -34,7 +35,7 @@ A example configuration can be found [here](example.yaml)
 - **power_trip_delay**(**Optional**: Time): Determines the length of the power outage applied to the display unit, which is to trick it into turning on. Defaults to `500ms`.
 - **power_message_repetitions**(**Optional**: uint): Determines how many message repetitions are used while turning on the machine. On some hardware combinations a higher value such as `25` is required to turn on the display successfully. Defaults to `5`.
 - **language**(**Optional**: int): Status sensor language. Select one of `en-US`, `de-DE`, `it-IT`, `hu-HU`. Defaults to `en-US`.
-- **model**(**Optional**: int): Different models or revisions may use different commands. This option can be used to specify the command set used by this component. Select one of `EP_2220`, `EP_2235`, `EP_3221`, `EP_3243`, `EP_3246`. Defaults to `EP_2220`.
+- **model**(**Optional**: int): Different models or revisions may use different commands. This option can be used to specify the command set used by this component. Select one of `EP_2220`, `EP_2235`, `EP_3221`, `EP_3243`, `EP_3246`, `EP_3321`. Defaults to `EP_2220`.
 
 ## Philips Power switch
 
