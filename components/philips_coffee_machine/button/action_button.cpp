@@ -70,11 +70,35 @@ namespace esphome
                     || action == SELECT_CAPPUCCINO
                     || action == SELECT_LATTE
                     || action == SELECT_AMERICANO
+                    || action == SELECT_ICED_COFFEE
                 ) return;
 
                 delay(BUTTON_SEQUENCE_DELAY);
                 write_array(command_press_play_pause);
 
+            }
+
+            void ActionButton::recover_display()
+            {
+                if (power_pin_ == nullptr || initial_state_ == nullptr)
+                {
+                    ESP_LOGE(TAG, "Cannot recover display: power pin is not configured!");
+                    return;
+                }
+
+                bool powered_value = *initial_state_;
+                if (invert_power_pin_)
+                    powered_value = !powered_value;
+                bool cut_value = !powered_value;
+
+                ESP_LOGD(TAG, "Recover display: cut=%d restore=%d", cut_value, powered_value);
+                power_pin_->digital_write(cut_value);
+                delay(300);
+                power_pin_->digital_write(powered_value);
+                delay(800);
+                power_pin_->digital_write(cut_value);
+                delay(200);
+                power_pin_->digital_write(powered_value);
             }
 
             void ActionButton::perform_action()
@@ -90,9 +114,10 @@ namespace esphome
                 // command[5] - Latte
                 // command[6] - Americano
                 // command[7] - Espresso Lungo
+                // command[8] - Iced Coffee
 
                 // Default for most models
-                std::vector<uint8_t> command[8] {
+                std::vector<uint8_t> command[9] {
                     command_press_1,
                     command_press_2,
                     command_press_3
@@ -119,6 +144,15 @@ namespace esphome
                     command[4] = command_press_6;
                     command[5] = command_press_4;
                     command[6] = command_press_5;
+                #endif
+
+                #ifdef PHILIPS_EP3321
+                    command[0] = command_press_5;
+                    command[1] = command_press_2;
+                    command[2] = command_press_4;
+                    command[3] = command_press_3;
+                    command[7] = command_press_1;
+                    command[8] = command_press_6;
                 #endif
                 
                 switch (action) {
@@ -154,14 +188,28 @@ namespace esphome
                     case MAKE_ESPRESSO_LUNGO:
                         execute_command(command[7]);
                         break;
+                    case SELECT_ICED_COFFEE:
+                    case MAKE_ICED_COFFEE:
+                        execute_command(command[8]);
+                        break;
                     case PLAY_PAUSE:
                         write_array(command_press_play_pause);
+                        break;
+                    case RECOVER_DISPLAY:
+                        recover_display();
                         break;
                     case SELECT_BEAN:
                         write_array(command_press_bean);
                         break;
                     case SELECT_SIZE:
                         write_array(command_press_size);
+                        break;
+                    case SELECT_TEMPERATURE:
+#if defined(PHILIPS_EP3321)
+                        write_array(command_press_temperature);
+#else
+                        ESP_LOGE(TAG, "Temperature action is only mapped for EP3321!");
+#endif
                         break;
 #if defined(PHILIPS_EP3243)
                     case SELECT_MILK:

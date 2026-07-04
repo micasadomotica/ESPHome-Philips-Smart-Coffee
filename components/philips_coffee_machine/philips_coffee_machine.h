@@ -29,6 +29,7 @@ namespace esphome
             void setup() override;
             void loop() override;
             void dump_config() override;
+            void recover_display();
 
             /**
              * @brief Set the reference to the uart port connected to the display
@@ -158,6 +159,9 @@ namespace esphome
             void add_action_button(philips_action_button::ActionButton *action_button)
             {
                 action_button->set_uart_device(&mainboard_uart_);
+                action_button->set_power_pin(power_pin_);
+                action_button->set_initial_state(&initial_pin_state_);
+                action_button->set_invert_power_pin(invert_power_pin_);
                 action_buttons_.push_back(action_button);
             }
 #endif

@@ -77,6 +77,11 @@ namespace esphome
                             power_on_grace_period_end_ = millis() + grace_period;
                             ESP_LOGD(TAG, "Grace period set to %u ms (until millis=%u)", 
                                      grace_period, power_on_grace_period_end_);
+
+                            // For phone/HA initiated power-on, do one display reset, then wait
+                            // for the display to boot before injecting the power commands.
+                            should_power_trip_ = false;
+                            ESP_LOGD(TAG, "Single power trip complete; waiting for display boot delay");
                         }
                     }
                 }
