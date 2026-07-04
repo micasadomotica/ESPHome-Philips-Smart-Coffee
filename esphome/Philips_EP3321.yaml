@@ -38,7 +38,7 @@ wifi:
 captive_portal:
 
 external_components:
-  - source: github://micasadomotica/ESPHome-Philips-Smart-Coffee@codex/ep3321
+  - source: github://micasadomotica/ESPHome-Philips-Smart-Coffee@main
     refresh: 0s
 
 uart:
