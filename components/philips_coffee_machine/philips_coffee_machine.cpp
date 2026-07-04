@@ -25,6 +25,24 @@ namespace esphome
             ESP_LOGI(TAG, "Setup complete - use 'Manual Power Trip' button in GUI to wake display if needed");
         }
 
+        void PhilipsCoffeeMachine::recover_display()
+        {
+            bool powered_value = initial_pin_state_;
+            if (invert_power_pin_)
+                powered_value = !powered_value;
+
+            bool cut_value = !powered_value;
+            ESP_LOGD(TAG, "Recover display: cut=%d restore=%d", cut_value, powered_value);
+
+            power_pin_->digital_write(cut_value);
+            delay(300);
+            power_pin_->digital_write(powered_value);
+            delay(800);
+            power_pin_->digital_write(cut_value);
+            delay(200);
+            power_pin_->digital_write(powered_value);
+        }
+
         void PhilipsCoffeeMachine::loop()
         {
             uint8_t display_buffer[DISPLAY_BUFFER_SIZE];

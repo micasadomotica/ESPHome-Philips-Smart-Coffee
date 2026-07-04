@@ -29,6 +29,7 @@ namespace esphome
             void setup() override;
             void loop() override;
             void dump_config() override;
+            void recover_display();
 
             /**
              * @brief Set the reference to the uart port connected to the display
