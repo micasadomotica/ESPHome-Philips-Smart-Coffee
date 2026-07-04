@@ -53,7 +53,6 @@ namespace esphome
             {
                 std::size_t size = std::min(display_uart_.available(), DISPLAY_BUFFER_SIZE);
                 display_uart_.read_array(display_buffer, size);
-                display_rx_bytes_ += size;
 
                 // Check if a action button is currently performing a long press
                 bool long_pressing = false;
@@ -118,7 +117,6 @@ namespace esphome
             {
                 std::size_t size = std::min(mainboard_uart_.available(), MAINBOARD_BUFFER_SIZE - 2);
                 mainboard_uart_.read_array(mainboard_buffer + 2, size);
-                mainboard_rx_bytes_ += size + 2;
 
                 display_uart_.write_array(mainboard_buffer + 2, size);
 
@@ -131,7 +129,6 @@ namespace esphome
                         mainboard_buffer[1] == message_header[1] &&
                         std::equal(mainboard_buffer + 17, mainboard_buffer + 19, std::begin(last_mainboard_message_checksum_)))
                     {
-                        mainboard_valid_frames_++;
                         last_message_from_mainboard_time_ = millis();
 #ifdef USE_TEXT_SENSOR
                         // Update status sensors
@@ -176,13 +173,6 @@ namespace esphome
 
             display_uart_.flush();
             mainboard_uart_.flush();
-
-            if (millis() - diagnostic_last_log_ > 5000)
-            {
-                diagnostic_last_log_ = millis();
-                ESP_LOGD(TAG, "UART traffic: display_rx=%u bytes, mainboard_rx=%u bytes, valid_frames=%u",
-                         display_rx_bytes_, mainboard_rx_bytes_, mainboard_valid_frames_);
-            }
         }
 
         void PhilipsCoffeeMachine::dump_config()
